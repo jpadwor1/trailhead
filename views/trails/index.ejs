@@ -1,0 +1,12 @@
+<% layout('partials/boilerplate', {authenticated: authenticated}) -%>
+
+    <h1>Trails</h1>
+    
+    
+    <ul>
+      <% trails.forEach((trail) => { %>
+          
+        <li><a href="/trails/<%= trail._id %>"><%= trail.properties.name %></a></li>
+      <% }) %>
+    </ul>
+    

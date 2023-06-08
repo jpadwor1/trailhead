@@ -1,0 +1,451 @@
+<% layout('partials/boilerplate', {authenticated:authenticated}) -%>
+
+
+<div class="show-page-container">
+
+  <div class="show-header-container">
+    <img src="../images/trail-photo.png" alt="trail photo" class="header-image">
+    <div class="header-overlay"></div>
+    <div class="trail-details">
+      <div class="header-title"><%= trails.properties.name %></div>
+      <div class="trail-reviews">
+      <p class="trail-difficulty">Easy</p>
+      <p>•</p>
+      <img src="../images/review star.png" alt="review star" class="review-star">
+      <p>4.7 (433)</p>
+     <p> 12.1 mi.</p>
+      </div>
+    </div>
+  </div>
+  <div class="button-wrapper">
+    <img class="rock-image" src="../images/cropped.avif" alt="rock texture">
+    <ul class="show-button-container">
+     
+      
+      <li class="button-module">
+        <a class="module-link" href="https://www.google.com/maps/dir/Current+Location/<%= latitude%>,<%= longitude%>" target="_blank">
+          <div class="icon-container">
+            <img src="../images/car-icon.png" alt="Car Icon" class="camera-icon">
+          
+          </div>
+          <p>Directions</p>
+        </a>
+      </li>
+
+      <li id="hide-on-mobile" class="button-module">
+        <a class="module-link" href="/trails/<%= trails._id %>/photos" target="_blank">
+          <div class="icon-container">
+            <img src="../images/camera-icon.png" alt="Camera Icon" class="camera-icon">
+            
+          </div>
+          <p>Photos</p>
+          </a>
+      </li>
+
+      <li id="hide-on-mobile" class="button-module">
+        <a class="module-link" href="https://www.facebook.com/sharer/sharer.php?u=<%= encodeURIComponent('https://localhost:3000/trails/' + trails._id) %>" target="_blank">
+          <div class="icon-container">
+            <img src="../images/share-icon.png" alt="Share Icon" class="camera-icon">
+            
+          </div>
+          <p>Share</p>
+        </a>
+      </li>
+
+      <li id="hide-on-mobile" class="button-module">
+        <a class="module-link" href="/trails/<%= trails._id %>/photos" target="_blank">
+          <div class="icon-container">
+            <img src="../images/printer-icon.png" alt="Printer Icon" class="camera-icon">
+            
+          </div>
+          <p>Print Map</p>
+        </a>
+      </li>
+
+      <li id="more-button" class="button-module ">
+        <a class="module-link " href="#">
+          <div class="icon-container">
+            <svg class="AUxnvEMKUpKbQqeQ+9Di6g==" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" role="presentation" aria-hidden="true" focusable="false" data-testid="overflow" style="transition: transform 200ms ease-in-out 0s; transform: rotate(0deg); height: 24px; width: 24px; fill: rgb(43, 56, 31);"><path d="M6 12a2 2 0 1 1-4 0 2 2 0 0 1 4 0ZM14 12a2 2 0 1 1-4 0 2 2 0 0 1 4 0ZM22 12a2 2 0 1 1-4 0 2 2 0 0 1 4 0Z"></path></svg>
+          </div>
+          <p>More</p>
+        
+        <ul class="show-dropdown-menu">
+          <!-- Replace # with the appropriate links and add your icons -->
+          <li><a href="#">Trail Photos</a></li>
+          <li><a href="#">Share with friends</a></li>
+          <li><a href="#">Print Map</a></li>
+      </ul>
+    </a>
+      </li>
+    </ul>
+</div>
+<div class="container">
+    <div class="trail-module-trail-info row">
+      <div class="trail-info-module col-lg-7 col-md-12">
+        <div class="trail-specs">
+          <ul class="specs">
+            <li class="trail-spec-item">
+              <h3>Length</h3>
+              <p>12.1 mi</p>
+            </li>
+            <li class="trail-spec-item">
+              <h3>Elevation Gain</h3>
+              <p>5,492 ft</p>
+            </li>
+            <li class="trail-spec-item">
+              <h3>Route Type</h3>
+              <p>Out & Back</p>
+            </li>
+          </ul>
+
+          <div class="trail-description">
+            <p id="trailDescription" class="truncate"> Hikers, walkers, sightseers, and runners alike flock to Piestewa Peak like moths to your camping lantern, drawn here in part because of its proximity to the Phoenix metropolitan area. Despite the crowds, this mountain can still be a lot of fun, offering a short but taxing climb and many great views of the Sonoran desert along the way. The parking lot is off Piestewa Peak Drive and leads to many more hiking trails in the Phoenix Mountains Preserve. The route starts on a short connector trail and then goes straight up to the summit. If you are looking for a great workout, this summit hike is the perfect trail. Some notable views from the summit include Camelback Mountain, the Dreamy Draw Recreation Area, and the city of Phoenix. The Piestewa Peak Summit Trail is especially great for a sunset hike to end your day.</p><a id="seeMoreBtn" class="trail-description-btn" href="#" onclick="antiTruncate()">See More</a>
+
+          </div>
+
+          <div class="trail-module-divider"></div>
+
+          <div class="tags-section">
+            <% for (var i = 0; i < 5; i++) { %>
+              <span class="trail-tag"><%= randomTags[i] %></span>
+            <% } %>
+          </div>
+
+          <div class="trail-module-divider"></div>
+        
+          <div class="weather-wrapper">
+          
+          
+            <div class="forecast-item">
+              <div class="weather-section">
+                <div class="not-found">
+                    <img src="../images/404.png">
+                    <p>Oops! Invalid location :/</p>
+                </div>
+
+                <div class="weather-box">
+                    <h4 class="weather-header"></h4>
+                    <img id="weather-image" src="">              
+                    <p class="temperature"></p>                 
+                </div>
+              </div>
+            </div>
+
+            <div class="forecast-item">
+              <div class="weather-section">
+                <div class="not-found">
+                    <img src="../images/404.png">
+                    <p>Oops! Invalid location :/</p>
+                </div>
+
+                <div class="weather-box">
+                    <h4 class="weather-header"></h4>
+                    <img id="weather-image" src="">              
+                    <p class="temperature"></p>                 
+                </div>
+              </div>
+            </div>
+
+            <div class="forecast-item">
+              <div class="weather-section">
+                <div class="not-found">
+                    <img src="../images/404.png">
+                    <p>Oops! Invalid location :/</p>
+                </div>
+
+                <div class="weather-box">
+                    <h4 class="weather-header"></h4>
+                    <img id="weather-image" src="">              
+                    <p class="temperature"></p>                 
+                </div>
+              </div>
+            </div>
+
+            <div class="forecast-item">
+              <div class="weather-section">
+                <div class="not-found">
+                    <img src="../images/404.png">
+                    <p>Oops! Invalid location :/</p>
+                </div>
+
+                <div class="weather-box">
+                    <h4 class="weather-header"></h4>
+                    <img id="weather-image" src="">              
+                    <p class="temperature"></p>                 
+                </div>
+              </div>
+            </div>
+
+          
+      
+            
+
+          </div>
+        </div>
+        <div class="trail-module-divider"></div>
+
+        <div class="review-container">
+           <!-- Modal -->
+<div id="reviewModal" class="modal">
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    <img src="<%=trailImages[getRandomFloat(0, trailImages.length)]%>" alt="<%= trails.properties.name %>" class="add-review-image">
+    <h2 class="review-heading">How'd you like <%=trails.properties.name%></h2>
+    <form id="reviewForm" action="/trails/<%=trails._id%>/reviews" method="post">
+      <input class="review-name" type="text" name="authorName" placeholder="Your Name" required>
+      <input class="review-rating" type="number" name="rating" min="1" max="5" placeholder="Rating" required>
+      <textarea class="add-review-body" name="reviewText" placeholder="Write your review..." required></textarea>
+      <button class="modal-submit-btn btn" type="submit">Submit</button>
+    </form>
+  </div>
+</div>
+          <% if (authenticated) { %>
+            <div class="add-review-container">
+              <button id="addReviewBtn" class="add-review-button" data-trail-id="<%= trails._id %>">Leave a Review</button>
+            </div>
+            <%}else { %>
+            <% } %>
+       
+          <% reviews.forEach(review => { %>
+            <% const timestamp = review.time; %>
+            <%const paddedTimestamp = timestamp.toString().padStart(10, '0')%>
+            <% const date = new Date(paddedTimestamp*1000); %>
+            <%const options = { year: 'numeric', month: 'long', day: 'numeric' }; %>
+            <%const formattedDate = date.toLocaleDateString()%>
+            <div class="profile-heading">
+              <div class="review-image">
+                <img src="<%= review.profile_photo_url %>" alt="profile_pic" referrerpolicy="no-referrer">
+              </div>
+              <div class="profile-info">
+                <p class="review-author"><%= review.author_name %></p>
+                <p class="review-date"><%= formattedDate %></p>
+              </div>
+            </div>
+              <div class="show-review-stars">
+                <% for (i=0; i< review.rating; i++){ %>
+                  <img src="../images/review star.png" alt="review star" class="show-review-star">
+                <%  }%>  
+              </div>         
+              <div class="review-body">
+                <p><%= review.text %></p>
+              </div>
+            
+          <% }) %>
+        </div>
+
+      </div>
+      <div class="trail-info-aside col-lg-5">
+        <!-- Mapbox map -->
+        <div class="show-map-container">
+          <div class="show-map" id="mapShow"></div>
+        </div>
+
+        //Nearby Trails tags-section
+        <div class="nearby-trails-wrapper">
+
+          <div class="nearby-trails-header">
+            <p>Nearby Trails</p>
+            <form action="/trails/search/nearby" method="POST">
+            <button type="submit" name="nearbyTrails" value="<%= trails.properties.city%>">Show More</button>
+            </form>
+          </div>
+          
+         
+        
+          <% shuffledNearbyTrails.slice(0, 5).forEach(trail => { %>
+            <a href="/trails/<%= trail._id%>">
+                <div class="nearby-trail-container">
+                    <img class="nearby-trail-image" src="<%=trailImages[getRandomFloat(0, trailImages.length)]%>" alt="<%= trail.properties.name %>">
+                
+                    <div class="nearby-trail-body">
+                        <div class="nearby-trail-reviews">
+                            <img src="../images/review star.png" alt="review star" class="nearby-review-star">
+        
+                            <p><%= trail.averageRating ? trail.averageRating.toFixed(2) : getRandomFloat(3,5)+'.'+getRandomFloat(1,9) %></p>
+                            <p>(<%= Math.floor(Math.random() * (559 - 12) + 12) %>)</p>
+                        </div>
+                          
+                        <div class="nearby-trail-details">
+                            <h3><%=trail.properties.name%></h3>
+                            <p class="city_state"><%= trail.properties.city%>,<%=trail.properties.state%></p>
+                        </div>
+                    </div>
+                </div>
+            </a>
+        <% }) %>
+        </div>
+      </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+<script>
+  // Get the modal element
+const modal = document.querySelector('#reviewModal');
+
+// Get the button that opens the modal
+const addReviewBtn = document.querySelector('#addReviewBtn');
+
+// Get the <span> element that closes the modal
+const closeBtn = modal.querySelector('.close');
+let trailId;
+// Open the modal when the button is clicked
+addReviewBtn.addEventListener('click', () => {
+  modal.style.display = 'block';
+  trailId = addReviewBtn.dataset.trailId;
+});
+
+// Close the modal when the <span> (close button) is clicked
+closeBtn.addEventListener('click', () => {
+  modal.style.display = 'none';
+});
+
+// Close the modal when the user clicks outside of it
+window.addEventListener('click', (event) => {
+  if (event.target === modal) {
+    modal.style.display = 'none';
+  }
+});
+
+const reviewForm = document.querySelector('.modal-submit-btn');
+
+reviewForm.addEventListener('click', () => {
+  modal.style.display = 'none';
+});
+</script>
+  <script>
+    const weatherBox = document.querySelectorAll(".weather-box");
+    const weatherDetails = document.querySelector(".weather-details");
+    const mainContainer = document.querySelector(".weather-section");
+    const error404 = document.querySelector(".not-found");
+    const apiKey = '<%=apiKey%>';
+    const trails = <%- JSON.stringify(trails) %>;
+    const cityName = trails.properties.city;
+  
+    fetch(`https://api.openweathermap.org/data/2.5/forecast?units=imperial&appid=${apiKey}&q=${cityName}`)
+      .then(response => response.json())
+      .then(json => {
+        if (json.cod === '404') {
+          mainContainer.style.height = "400px";
+          weatherBox.forEach(box => box.style.display = "none");
+          weatherDetails.style.display = "none";
+          error404.style.display = "block";
+          error404.classList.add("fadeIn");
+          return;
+        }
+  
+        console.log(json);
+        error404.style.display = "none";
+        error404.classList.remove("fadeIn");
+  
+        const weatherForecast = json.list.filter((item, index) => index % 8 === 0).slice(0, 4);
+  
+        const forecastItems = document.querySelectorAll(".forecast-item");
+  
+        forecastItems.forEach((item, index) => {
+          const image = item.querySelector("#weather-image");
+          const temperature = item.querySelector(".temperature");
+          const weatherHeader = item.querySelector(".weather-header");
+          const forecastDate = new Date(weatherForecast[index].dt_txt);
+          const dayOfWeek = forecastDate.toLocaleDateString('en-US', { weekday: 'long' });
+  
+          switch (weatherForecast[index].weather[0].main) {
+            case 'Clear':
+              image.src = '../images/clear.png';
+              break;
+            case 'Rain':
+              image.src = '../images/rain.png';
+              break;
+            case 'Snow':
+              image.src = '../images/snow.png';
+              break;
+            case 'Clouds':
+              image.src = '../images/cloud.png';
+              break;
+            case 'Mist':
+              image.src = '../images/mist.png';
+              break;
+            default:
+              image.src = '';
+              break;
+          }
+  
+          temperature.innerHTML = `${parseInt(weatherForecast[index].main.temp)}°F`;
+          weatherHeader.innerHTML = dayOfWeek;
+        });
+  
+        weatherBox.forEach(box => box.style.display = "");
+        weatherBox.forEach(box => box.classList.add("fadeIn"));
+
+      })
+      .catch(error => {
+        console.error('Error:', error);
+      });
+  </script>
+  <script>
+    antiTruncate = function () {
+      const description = document.getElementById('trailDescription');
+      const seeMoreBtn = document.getElementById('seeMoreBtn');
+    
+      description.classList.remove('truncate');
+      seeMoreBtn.style.display = 'none';
+    }
+    
+  </script>
+  <script>
+    // Retrieve the trails data passed from the server-side
+    
+   
+    let longitude, latitude;
+    if (trails && trails.geometry) {
+    if (trails.geometry.type === 'LineString') {
+      longitude = trails.geometry.coordinates[0][0];
+    latitude = trails.geometry.coordinates[0][1];;
+    } else if (trails.geometry.type === 'MultiLineString') {
+      longitude = trails.geometry.coordinates[0][0][0];
+    latitude = trails.geometry.coordinates[0][0][1];
+    }
+  }
+
+  mapboxgl.accessToken = '<%= mapbox %>';
+    const map = new mapboxgl.Map({
+      container: 'mapShow',
+      style: 'mapbox://styles/mapbox/streets-v12',
+      center: [longitude, latitude],
+      zoom: 12
+    });
+
+    map.on('load', () => {
+      map.addSource('route', {
+        type: 'geojson',
+        data: {
+          type: 'Feature',
+          properties: {},
+          geometry: trails.geometry
+        }
+      });
+
+      map.addLayer({
+        id: 'route',
+        type: 'line',
+        source: 'route',
+        layout: {
+          'line-join': 'round',
+          'line-cap': 'round'
+        },
+        paint: {
+          'line-color': '#025464',
+          'line-width': 4
+        }
+      });
+    });
+  </script>
+ 
+  

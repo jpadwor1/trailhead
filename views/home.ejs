@@ -1,0 +1,151 @@
+<% layout('partials/boilerplate', {authenticated:authenticated}) -%>
+
+<div class="home-container">
+    <form class="search-form" action="/trails/search" method="post">
+        <img class="search-icon" src="../images/searchIcon.svg" alt="">
+        <input type="text" name="searchBar" id="search-bar" placeholder="Search by city, park, or trail name
+        ">
+        <button class="search-btn" type="submit"></button>
+    </form>
+</div>
+
+<div class="home-trail-heading">
+    <h1>Explore Trails</h1>
+    <div class="break"></div>
+</div>
+
+<div class="carousel">
+    <ul class="gallery">
+        <% if(trails){ %>
+        <% trails.slice(127, 135).forEach(trail => { %>
+            <li class="gallery-item">
+            <a href="/trails/<%= trail._id%>">
+                <div class="nearby-trail-container home-trail-container">
+                    <img class="nearby-trail-image home-trail-image" src="<%=trailImages[getRandomFloat(0, trailImages.length)]%>" alt="<%= trail.properties.name %>">
+                
+                    <div class="nearby-trail-body home-trail-body">
+                        <div id="home-trail-reviews" class="nearby-trail-reviews">
+                            <img src="../images/review star.png" alt="review star" class="nearby-review-star">
+        
+                            <p><%= trail.averageRating ? trail.averageRating.toFixed(2) : getRandomFloat(3,5)+'.'+getRandomFloat(1,9) %></p>
+                            <p>(<%= Math.floor(Math.random() * (559 - 12) + 12) %>)</p>
+                        </div>
+                          
+                        <div class="nearby-trail-details home-trail-details">
+                            <h3><%=trail.properties.name%></h3>
+                            <p class="city_state"><%= trail.properties.city%>,<%=trail.properties.state%></p>
+                        </div>
+                    </div>
+                </div>
+            </a>
+        </li>
+        <% }) %>
+        <% } else { %>
+            <% trails.slice(127, 135).forEach(trail => { %>
+                <li class="gallery-item">
+                <a href="/trails/<%= trail._id%>">
+                    <div class="nearby-trail-container home-trail-container">
+                        <img class="nearby-trail-image home-trail-image" src="<%=trailImages[getRandomFloat(0, trailImages.length)]%>" alt="<%= trail.properties.name %>">
+                    
+                        <div class="nearby-trail-body home-trail-body">
+                            <div id="home-trail-reviews" class="nearby-trail-reviews ">
+                                <img src="../images/review star.png" alt="review star" class="nearby-review-star">
+            
+                                <p><%= trail.averageRating ? trail.averageRating.toFixed(2) : getRandomFloat(3,5)+'.'+getRandomFloat(1,9) %></p>
+                                <p>(<%= Math.floor(Math.random() * (559 - 12) + 12) %>)</p>
+                            </div>
+                              
+                            <div class="nearby-trail-details home-trail-details">
+                               
+                                <h3><%=trail.properties.name%></h3>
+                                <p class="city_state"><%= trail.properties.city%>,<%=trail.properties.state%></p>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </li>
+            <% }) %> 
+        <% } %>
+
+    </ul>
+</div>
+
+
+
+
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+<script>
+   
+    if ('geolocation' in navigator) {
+        navigator.geolocation.getCurrentPosition(
+          (position) => {
+            let latitude = position.coords.latitude;
+            let longitude = position.coords.longitude;
+            
+            // Update the currentLocationElement with the latitude and longitude
+            axios.post('/search-trails', {
+                latitude: latitude,
+                longitude: longitude
+            })
+            .then(response => {
+                
+            })
+            .catch(error => {
+                console.error(error);
+            });
+          },
+          (error) => {
+            switch(error.code) {
+              case error.PERMISSION_DENIED:
+                console.error("User denied the request for Geolocation.");
+                break;
+              case error.POSITION_UNAVAILABLE:
+                console.error("Location information is unavailable.");
+                break;
+              case error.TIMEOUT:
+                console.error("The request to get user location timed out.");
+                break;
+              case error.UNKNOWN_ERROR:
+                console.error("An unknown error occurred.");
+                break;
+            }
+          }
+        );
+    } else {
+        console.log('Geolocation is not supported by this browser.');
+    }
+
+    const slider = document.querySelector('.gallery');
+let isDown = false;
+let startX;
+let scrollLeft;
+
+slider.addEventListener('mousedown', e => {
+  isDown = true;
+  slider.classList.add('active');
+  startX = e.pageX - slider.offsetLeft;
+  scrollLeft = slider.scrollLeft;
+});
+slider.addEventListener('mouseleave', _ => {
+  isDown = false;
+  slider.classList.remove('active');
+});
+slider.addEventListener('mouseup', _ => {
+  isDown = false;
+  slider.classList.remove('active');
+});
+slider.addEventListener('mousemove', e => {
+  if (!isDown) return;
+  e.preventDefault();
+  const x = e.pageX - slider.offsetLeft;
+  const SCROLL_SPEED = 3;
+  const walk = (x - startX) * SCROLL_SPEED;
+  slider.scrollLeft = scrollLeft - walk;
+});
+
+
+</script>
